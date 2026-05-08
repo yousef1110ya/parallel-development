@@ -18,8 +18,8 @@ for each task there should be a new branch for that task and it should work as f
 3. check for comments to check if there is any comments on the code as they won't be discussed directly .
 ### code review  
 every pull request must be reviewd by yousuf or Omar to be approved  . 
-### commit messages 
-please provide a full commit message not just something like fix bugs or added a feature . the commit message needs to be clear enough that the reader can know what you did and how you did it and what is the reason you choose to do what you did . 
+### commit messages .
+> please provide a full commit message not just something like fix bugs or added a feature . the commit message needs to be clear enough that the reader can know what you did and how you did it and what is the reason you choose to do what you did . 
 --- 
 ## reports . 
 as the project needs in-time reporting , this [google docs link](https://docs.google.com/document/d/1Lzil2X189-E8tpO5pyColt6u9bUnX4zLIuy3Jo1gnv4/edit?usp=sharing) will be the place where I add all  the reports step by step . 
