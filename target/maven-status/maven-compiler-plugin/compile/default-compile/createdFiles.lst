@@ -1,0 +1,11 @@
+com\ecommerce\ecommerce\model\Product.class
+com\ecommerce\ecommerce\config\com\ecommerce\config\DataLoader.class
+com\ecommerce\ecommerce\controller\ProductController.class
+com\ecommerce\ecommerce\controller\TestController.class
+com\ecommerce\ecommerce\services\ProductService.class
+com\ecommerce\ecommerce\controller\CategoryController.class
+com\ecommerce\ecommerce\repository\ProductRepository.class
+com\ecommerce\ecommerce\repository\CategoryRepository.class
+com\ecommerce\ecommerce\services\CategoryService.class
+com\ecommerce\ecommerce\model\Category.class
+com\ecommerce\ecommerce\EcommerceApplication.class
