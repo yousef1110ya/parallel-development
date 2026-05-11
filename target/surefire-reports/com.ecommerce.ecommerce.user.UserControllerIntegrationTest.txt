@@ -1,0 +1,37 @@
+-------------------------------------------------------------------------------
+Test set: com.ecommerce.ecommerce.user.UserControllerIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 10, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 2.426 s <<< FAILURE! -- in com.ecommerce.ecommerce.user.UserControllerIntegrationTest
+com.ecommerce.ecommerce.user.UserControllerIntegrationTest.deposit_shouldReturn400_whenAmountIsZero -- Time elapsed: 0.211 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<400> but was:<200>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:59)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:122)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$9(StatusResultMatchers.java:637)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at com.ecommerce.ecommerce.user.UserControllerIntegrationTest.deposit_shouldReturn400_whenAmountIsZero(UserControllerIntegrationTest.java:108)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+com.ecommerce.ecommerce.user.UserControllerIntegrationTest.getProfile_shouldReturn401_whenNoToken -- Time elapsed: 0.193 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<401> but was:<403>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:59)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:122)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$9(StatusResultMatchers.java:637)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at com.ecommerce.ecommerce.user.UserControllerIntegrationTest.getProfile_shouldReturn401_whenNoToken(UserControllerIntegrationTest.java:58)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
+com.ecommerce.ecommerce.user.UserControllerIntegrationTest.updateProfile_shouldReturn400_whenNameBlank -- Time elapsed: 0.203 s <<< FAILURE!
+java.lang.AssertionError: Status expected:<400> but was:<200>
+	at org.springframework.test.util.AssertionErrors.fail(AssertionErrors.java:59)
+	at org.springframework.test.util.AssertionErrors.assertEquals(AssertionErrors.java:122)
+	at org.springframework.test.web.servlet.result.StatusResultMatchers.lambda$matcher$9(StatusResultMatchers.java:637)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at com.ecommerce.ecommerce.user.UserControllerIntegrationTest.updateProfile_shouldReturn400_whenNameBlank(UserControllerIntegrationTest.java:83)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+
