@@ -1,0 +1,8 @@
+.git
+.mvn
+target
+README.md
+Readme.md
+HELP.md
+*.iml
+.idea
