@@ -1,12 +1,16 @@
 package com.ecommerce.ecommerce.users;
 
 
+import com.ecommerce.ecommerce.transaction.Transaction;
+import com.ecommerce.ecommerce.transaction.TransactionRepository;
+import com.ecommerce.ecommerce.transaction.TransactionType;
 import com.ecommerce.ecommerce.users.dto.DepositRequestDTO;
 import com.ecommerce.ecommerce.users.dto.UpdateUserRequestDTO;
 import com.ecommerce.ecommerce.users.dto.UserResponseDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,10 +19,15 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+ // Add these to the constructor injection in UserService:
+    private final TransactionRepository transactionRepository;
 
+    public UserService(UserRepository userRepository,
+                       TransactionRepository transactionRepository) {
+        this.userRepository = userRepository;
+        this.transactionRepository = transactionRepository;
+    }
+    
     public UserResponseDTO getProfile(String email) {
         User user = findByEmailOrThrow(email);
         return toDTO(user);
@@ -35,7 +44,16 @@ public class UserService {
     public UserResponseDTO deposit(String email, DepositRequestDTO dto) {
         User user = findByEmailOrThrow(email);
         user.setBalance(user.getBalance().add(dto.getAmount()));
-        return toDTO(userRepository.save(user));
+        userRepository.save(user);
+
+        Transaction transaction = new Transaction();
+        transaction.setUser(user);
+        transaction.setAmount(dto.getAmount());
+        transaction.setType(TransactionType.DEPOSIT);
+        transaction.setCreatedAt(LocalDateTime.now());
+        transactionRepository.save(transaction);
+
+        return toDTO(user);
     }
 
     public List<UserResponseDTO> getAllUsers() {
