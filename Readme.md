@@ -25,5 +25,15 @@ every pull request must be reviewd by yousuf or Omar to be approved  .
 as the project needs in-time reporting , this [google docs link](https://docs.google.com/document/d/1Lzil2X189-E8tpO5pyColt6u9bUnX4zLIuy3Jo1gnv4/edit?usp=sharing) will be the place where I add all  the reports step by step . 
 
 ---
+## local running modes
+- quick local run with in-memory H2:
+  `mvn spring-boot:run`
+- postgres-backed local run:
+  `docker compose -f docker-compose.yml up -d`
+  `mvn spring-boot:run -Dspring-boot.run.profiles=postgres`
+
+the docker compose command only starts PostgreSQL. it does not make Maven use PostgreSQL automatically unless you activate the `postgres` Spring profile or provide the datasource environment variables yourself.
+
+---
  ## Licence 
  IDC man , take this code as you please 
