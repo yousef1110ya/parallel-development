@@ -23,7 +23,7 @@
           </elementProp>
           <elementProp name="productId" elementType="Argument">
             <stringProp name="Argument.name">productId</stringProp>
-            <stringProp name="Argument.value">1</stringProp>
+            <stringProp name="Argument.value">2</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="quantity" elementType="Argument">
@@ -257,7 +257,7 @@ if (code?.startsWith(&apos;2&apos;) &amp;&amp; (body.contains(&apos;&quot;messag
         </ResultCollector>
         <hashTree/>
       </hashTree>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>

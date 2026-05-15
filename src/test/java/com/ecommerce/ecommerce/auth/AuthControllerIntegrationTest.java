@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.auth;
 
 
+import com.ecommerce.ecommerce.support.IntegrationTestSupport;
 import com.ecommerce.ecommerce.users.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,16 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Testcontainers
-class AuthControllerIntegrationTest {
+class AuthControllerIntegrationTest extends IntegrationTestSupport {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private UserRepository userRepository;
 
     @BeforeEach
-    void cleanUp() {
-        userRepository.deleteAll();
-    }
+    void cleanUp() {}
 
     // ---- Register ----
 

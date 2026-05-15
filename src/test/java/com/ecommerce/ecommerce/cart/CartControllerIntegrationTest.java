@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.cart;
 
+import com.ecommerce.ecommerce.support.IntegrationTestSupport;
 import com.ecommerce.ecommerce.users.UserRepository;
 import com.ecommerce.ecommerce.users.UserRole;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Testcontainers
-class CartControllerIntegrationTest {
+class CartControllerIntegrationTest extends IntegrationTestSupport {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -37,7 +38,6 @@ class CartControllerIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userRepository.deleteAll();
         userToken = registerAndGetToken("Jane", "jane@example.com", "password123", false);
         adminToken = registerAndGetToken("Admin", "admin@example.com", "admin123", true);
         Long categoryId = createCategory("Electronics");

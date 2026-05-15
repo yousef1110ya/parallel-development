@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.cart;
 
 import com.ecommerce.ecommerce.cart.dto.*;
+import com.ecommerce.ecommerce.exception.InventoryConflictException;
 import com.ecommerce.ecommerce.order.*;
 import com.ecommerce.ecommerce.product.Product;
 import com.ecommerce.ecommerce.product.ProductRepository;
@@ -9,6 +10,11 @@ import com.ecommerce.ecommerce.transaction.TransactionRepository;
 import com.ecommerce.ecommerce.transaction.TransactionType;
 import com.ecommerce.ecommerce.users.User;
 import com.ecommerce.ecommerce.users.UserRepository;
+
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,6 +95,7 @@ public class CartService {
                     item.setCart(cart);
                     item.setProduct(product);
                     item.setQuantity(dto.getQuantity());
+                    cart.getItems().add(item);
                     cartItemRepository.save(item);
                 });
 
@@ -125,6 +132,7 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Item not found in cart"));
 
         cartItemRepository.delete(item);
+        cart.getItems().remove(item);
         return toDTO(cartRepository.findById(cart.getId()).orElseThrow());
     }
 
@@ -138,6 +146,11 @@ public class CartService {
     }
 
     @Transactional
+    @Retryable(
+            retryFor = OptimisticLockingFailureException.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 50, multiplier = 2.0)
+    )
     public CheckoutResponseDTO checkout(String email) {
         User user = findUserOrThrow(email);
         Cart cart = getOrCreateCart(user);
@@ -153,12 +166,10 @@ public class CartService {
         for (CartItem cartItem : cart.getItems()) {
             Product product = cartItem.getProduct();
 
-            // Skip if out of stock
             if (product.getStock() < cartItem.getQuantity()) {
                 skippedItems.add(product.getName() +
-                    " (requested: " + cartItem.getQuantity() +
-                    ", available: " + product.getStock() + ")"
-                );
+                        " (requested: " + cartItem.getQuantity() +
+                        ", available: " + product.getStock() + ")");
                 continue;
             }
 
@@ -173,29 +184,24 @@ public class CartService {
             validOrderItems.add(orderItem);
         }
 
-        // All items were skipped
         if (validOrderItems.isEmpty()) {
             throw new RuntimeException("No items could be fulfilled. All items are out of stock.");
         }
 
-        // Balance check
         if (user.getBalance().compareTo(total) < 0) {
-            throw new RuntimeException(
-                "Insufficient balance. Required: " + total +
-                ", Available: " + user.getBalance()
-            );
+            throw new RuntimeException("Insufficient balance");
         }
 
-        // Deduct balance
         user.setBalance(user.getBalance().subtract(total));
         userRepository.save(user);
 
-        // Deduct stock
         for (OrderItem orderItem : validOrderItems) {
             Product product = orderItem.getProduct();
             product.setStock(product.getStock() - orderItem.getQuantity());
             productRepository.save(product);
         }
+
+        productRepository.flush();
 
         // Create order
         Order order = new Order();
@@ -227,6 +233,11 @@ public class CartService {
                 : "Checkout partially successful. Some items were skipped.";
 
         return new CheckoutResponseDTO(order.getId(), total, skippedItems, message);
+    }
+
+    @Recover
+    public CheckoutResponseDTO recover(OptimisticLockingFailureException ex, String email) {
+        throw new InventoryConflictException("Checkout conflicted with another purchase. Please try again.");
     }
 
     // ---- Helpers ----

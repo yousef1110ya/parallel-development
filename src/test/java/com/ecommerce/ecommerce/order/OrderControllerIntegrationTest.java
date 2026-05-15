@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.order;
 
+import com.ecommerce.ecommerce.support.IntegrationTestSupport;
 import com.ecommerce.ecommerce.users.UserRepository;
 import com.ecommerce.ecommerce.users.UserRole;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -24,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Testcontainers
-class OrderControllerIntegrationTest {
+class OrderControllerIntegrationTest extends IntegrationTestSupport {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -38,7 +39,6 @@ class OrderControllerIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userRepository.deleteAll();
         userToken = registerAndGetToken("Jane", "jane@example.com", "password123", false);
         adminToken = registerAndGetToken("Admin", "admin@example.com", "admin123", true);
         otherUserToken = registerAndGetToken("Bob", "bob@example.com", "password123", false);

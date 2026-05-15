@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.user;
 
 
+import com.ecommerce.ecommerce.support.IntegrationTestSupport;
 import com.ecommerce.ecommerce.users.UserRepository;
 import com.ecommerce.ecommerce.users.UserRole;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Testcontainers
-class UserControllerIntegrationTest {
+class UserControllerIntegrationTest extends IntegrationTestSupport {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -36,7 +37,6 @@ class UserControllerIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        userRepository.deleteAll();
         userToken = registerAndGetToken("Jane Doe", "jane@example.com", "password123", false);
         adminToken = registerAndGetToken("Admin User", "admin@example.com", "admin123", true);
     }
