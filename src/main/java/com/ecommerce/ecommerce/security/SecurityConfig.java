@@ -1,7 +1,10 @@
 package com.ecommerce.ecommerce.security;
 
 
+import com.ecommerce.ecommerce.capacity.RequestCapacityFilter;
+import com.ecommerce.ecommerce.capacity.RequestCapacityGuard;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,13 +23,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
+    private final RequestCapacityGuard requestCapacityGuard;
+    private final long requestCapacityWaitMillis;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfig(
+            JwtAuthFilter jwtAuthFilter,
+            RequestCapacityGuard requestCapacityGuard,
+            @Value("${app.capacity.max-wait-ms:200}") long requestCapacityWaitMillis) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.requestCapacityGuard = requestCapacityGuard;
+        this.requestCapacityWaitMillis = requestCapacityWaitMillis;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        RequestCapacityFilter requestCapacityFilter =
+                new RequestCapacityFilter(requestCapacityGuard, requestCapacityWaitMillis);
+
         http
             .csrf(csrf -> csrf.disable())
             .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
@@ -34,10 +47,18 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .exceptionHandling(ex -> ex.authenticationEntryPoint(authenticationEntryPoint()))
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**", "/actuator/health", "/actuator/info", "/actuator/metrics/**", "/h2-console/**").permitAll()
+                .requestMatchers(
+                        "/api/auth/**",
+                        "/actuator/health",
+                        "/actuator/info",
+                        "/actuator/metrics/**",
+                        "/actuator/prometheus",
+                        "/h2-console/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(requestCapacityFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(jwtAuthFilter, RequestCapacityFilter.class);
 
         return http.build();
     }

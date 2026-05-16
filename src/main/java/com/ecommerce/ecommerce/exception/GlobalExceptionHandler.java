@@ -27,7 +27,6 @@ public class GlobalExceptionHandler {
                 .orElse("Validation error");
         return ResponseEntity.badRequest().body(Map.of("error", message));
     }
-    
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<Map<String, String>> handleAccessDenied(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
