@@ -92,6 +92,10 @@ services:
       APP_JWT_SECRET: docker_demo_secret_key_must_be_at_least_32_chars
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: pass
     depends_on:
       postgres:
         condition: service_healthy
@@ -115,7 +119,10 @@ services:
       APP_JWT_SECRET: docker_demo_secret_key_must_be_at_least_32_chars
       SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
       SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
-
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: admin
+      SPRING_RABBITMQ_PASSWORD: pass
     depends_on:
       postgres:
         condition: service_healthy
