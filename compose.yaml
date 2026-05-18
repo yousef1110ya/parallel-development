@@ -34,6 +34,10 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: pass
+      RABBITMQ_DEFAULT_VHOST: /
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
@@ -86,6 +90,8 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "false"
       APP_JWT_SECRET: docker_demo_secret_key_must_be_at_least_32_chars
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
@@ -107,6 +113,9 @@ services:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "false"
       APP_JWT_SECRET: docker_demo_secret_key_must_be_at_least_32_chars
+      SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+      SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+
     depends_on:
       postgres:
         condition: service_healthy

@@ -1,10 +1,13 @@
 package com.ecommerce.ecommerce.cart;
 
 import com.ecommerce.ecommerce.cart.dto.*;
+import com.ecommerce.ecommerce.cart.event.OrderPlacedEvent;
 import com.ecommerce.ecommerce.exception.InventoryConflictException;
 import com.ecommerce.ecommerce.order.*;
 import com.ecommerce.ecommerce.product.Product;
 import com.ecommerce.ecommerce.product.ProductRepository;
+import com.ecommerce.ecommerce.rabbitmq.config.RabbitMQConfig;
+import com.ecommerce.ecommerce.rabbitmq.publisher.EventPublisher;
 import com.ecommerce.ecommerce.transaction.Transaction;
 import com.ecommerce.ecommerce.transaction.TransactionRepository;
 import com.ecommerce.ecommerce.transaction.TransactionType;
@@ -33,19 +36,22 @@ public class CartService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final TransactionRepository transactionRepository;
+    private final EventPublisher eventPublisher;
 
     public CartService(CartRepository cartRepository,
                        CartItemRepository cartItemRepository,
                        ProductRepository productRepository,
                        UserRepository userRepository,
                        OrderRepository orderRepository,
-                       TransactionRepository transactionRepository) {
+                       TransactionRepository transactionRepository,
+                       EventPublisher eventPublisher) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.transactionRepository = transactionRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     // Get or create cart for user
@@ -231,6 +237,17 @@ public class CartService {
         String message = skippedItems.isEmpty()
                 ? "Checkout successful"
                 : "Checkout partially successful. Some items were skipped.";
+        
+        eventPublisher.publish(
+        	    RabbitMQConfig.ORDER_PLACED_KEY,
+        	    new OrderPlacedEvent(
+        	        order.getId(),
+        	        user.getId(),
+        	        user.getEmail(),
+        	        total,
+        	        LocalDateTime.now()
+        	    )
+        	);
 
         return new CheckoutResponseDTO(order.getId(), total, skippedItems, message);
     }

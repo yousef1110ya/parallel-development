@@ -35,7 +35,7 @@ public class ProductController {
 
     // POST /api/products — admin only
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDTO> createProduct(@Valid @RequestBody ProductRequestDTO dto) {
         return ResponseEntity.ok(productService.createProduct(dto));
     }
