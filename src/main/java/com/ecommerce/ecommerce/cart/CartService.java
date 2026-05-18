@@ -154,6 +154,7 @@ public class CartService {
     @Transactional
     @Retryable(
             retryFor = OptimisticLockingFailureException.class,
+            noRetryFor = RuntimeException.class,    
             maxAttempts = 3,
             backoff = @Backoff(delay = 50, multiplier = 2.0)
     )

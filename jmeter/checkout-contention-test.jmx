@@ -90,7 +90,7 @@
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/auth/login" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/auth/login">
           <stringProp name="HTTPSampler.path">/api/auth/login</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -123,7 +123,7 @@
           </JSONPostProcessor>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/users/me/deposit" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/users/me/deposit">
           <stringProp name="HTTPSampler.path">/api/users/me/deposit</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -148,7 +148,7 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/cart/items" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/cart/items">
           <stringProp name="HTTPSampler.path">/api/cart/items</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -156,7 +156,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;productId&quot;:${productId},&quot;quantity&quot;:${quantity}}</stringProp>
+                <stringProp name="Argument.value">{&quot;productId&quot;:1,&quot;quantity&quot;:${quantity}}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -173,12 +173,12 @@
           </HeaderManager>
           <hashTree/>
         </hashTree>
-        <SyncTimer guiclass="TestBeanGUI" testclass="SyncTimer" testname="Synchronize Checkouts" enabled="true">
+        <SyncTimer guiclass="TestBeanGUI" testclass="SyncTimer" testname="Synchronize Checkouts">
           <intProp name="groupSize">50</intProp>
           <longProp name="timeoutInMs">15000</longProp>
         </SyncTimer>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/cart/checkout" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST /api/cart/checkout">
           <stringProp name="HTTPSampler.path">/api/cart/checkout</stringProp>
           <stringProp name="HTTPSampler.method">POST</stringProp>
           <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
@@ -221,7 +221,7 @@ if (code?.startsWith(&apos;2&apos;) &amp;&amp; (body.contains(&apos;&quot;messag
           </JSR223PostProcessor>
           <hashTree/>
         </hashTree>
-        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
+        <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
           <boolProp name="ResultCollector.error_logging">false</boolProp>
           <objProp>
             <name>saveConfig</name>
